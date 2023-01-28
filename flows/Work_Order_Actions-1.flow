@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <choices>
+        <name>EditAsset</name>
+        <choiceText>View Asset</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>EditAsset</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>EditWOLI</name>
+        <choiceText>View Work Order Line Items</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>EditWOLI</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>Assess_Decision</name>
+        <label>Assess Decision</label>
+        <locationX>504</locationX>
+        <locationY>218</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Assess_WOLI</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Available_Actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>EditWOLI</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Edit_Work_Order_Line_Items</targetReference>
+            </connector>
+            <label>Assess WOLI</label>
+        </rules>
+        <rules>
+            <name>Assess_Asset</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Available_Actions</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>EditAsset</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Edit_Asset</targetReference>
+            </connector>
+            <label>Assess Asset</label>
+        </rules>
+    </decisions>
+    <interviewLabel>Work Order Actions {!$Flow.CurrentDateTime}</interviewLabel>
+    <isTemplate>true</isTemplate>
+    <label>Work Order Actions</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>FieldServiceMobile</processType>
+    <screens>
+        <name>Work_Order_Actions</name>
+        <label>Work Order Actions</label>
+        <locationX>512</locationX>
+        <locationY>50</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Assess_Decision</targetReference>
+        </connector>
+        <fields>
+            <name>Available_Actions</name>
+            <choiceReferences>EditWOLI</choiceReferences>
+            <choiceReferences>EditAsset</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Available Actions</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <startElementReference>Work_Order_Actions</startElementReference>
+    <status>Active</status>
+    <subflows>
+        <name>Edit_Asset</name>
+        <label>Edit Asset</label>
+        <locationX>775</locationX>
+        <locationY>345</locationY>
+        <flowName>Edit_Asset</flowName>
+        <inputAssignments>
+            <name>Id</name>
+            <value>
+                <elementReference>Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <subflows>
+        <name>Edit_Work_Order_Line_Items</name>
+        <label>Edit Work Order Line Items</label>
+        <locationX>248</locationX>
+        <locationY>348</locationY>
+        <flowName>Edit_WOLIs</flowName>
+        <inputAssignments>
+            <name>Id</name>
+            <value>
+                <elementReference>Id</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <name>Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
